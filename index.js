@@ -50,32 +50,31 @@ Auth0DasboardWidget.prototype.get_chart_type = function(type) {
 Auth0DasboardWidget.prototype.show = function(ele) {
     var self = this;
 
-    var load_chart = curry(function (chart, data) {
+    var load_chart = function (chart, data) {
         var chart_wrapper = self.wrapper.append('div')
                                 .attr('id', chart.name);
         var type = self.get_chart_type(chart.type);
         type(chart_wrapper, data);
-    });
+    };
 
-    var init_chart = function (chart){
+
+    self.wrapper = d3.select(ele);
+
+    for (var a = 0; a < self.charts.length; a++) {
+        let chart = self.charts[a];
+
         fetch(chart.url)
             .then(function(response) {
                 return response.json()
             })
             .then(function(data) {
-                return data.map(function (d) {
-                  return [ d.age, d.count ];
-                });
+                return data.map( d => [ d.age, d.count ] );
             })
-            .then(load_chart(chart))
+            .then( data => load_chart(chart, data) )
             .catch(function(ex) {
                 console.log('parsing failed', ex)
             });
     }
-
-    self.wrapper = d3.select(ele);
-
-    self.charts.forEach(init_chart);
 
 }
 
