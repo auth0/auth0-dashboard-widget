@@ -22,6 +22,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     browserify: {
       options: {
+        transform: [["babelify", { "stage": 0 }]],
         browserifyOptions: {
           debug: true
         },
