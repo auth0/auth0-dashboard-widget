@@ -1,14 +1,11 @@
 require('./lib/insert-css');
 
 var d3      = require('d3');
-var curry   = require('curry');
-
-var Promise = require('bluebird');
 var fetch   = require('fetchify')(Promise).fetch;
 
-var PieChart = require('./lib/chart-type/pie.js');
-var BarChart = require('./lib/chart-type/bar.js');
-var SplineChart = require('./lib/chart-type/spline.js');
+import PieChart from "./lib/chart-type/pie.js"
+import BarChart from "./lib/chart-type/bar.js"
+import SplineChart from "./lib/chart-type/spline.js"
 
 module.exports = Auth0DasboardWidget;
 
@@ -57,19 +54,14 @@ Auth0DasboardWidget.prototype.show = function(ele) {
         type(chart_wrapper, data);
     };
 
-
     self.wrapper = d3.select(ele);
 
-    for (var a = 0; a < self.charts.length; a++) {
+    for (let a = 0; a < self.charts.length; a++) {
         let chart = self.charts[a];
 
         fetch(chart.url)
-            .then(function(response) {
-                return response.json()
-            })
-            .then(function(data) {
-                return data.map( d => [ d.age, d.count ] );
-            })
+            .then(response => response.json())
+            .then( data => data.map( d => [ d.age, d.count ] ) )
             .then( data => load_chart(chart, data) )
             .catch(function(ex) {
                 console.log('parsing failed', ex)
@@ -80,13 +72,11 @@ Auth0DasboardWidget.prototype.show = function(ele) {
 
 Auth0DasboardWidget.prototype.showDaily = function(ele) {
     var self = this;
-    var stats_url = 'https://' + self.domain + '/api/v2/stats/daily';
 
     var filter_from = '20150701';
     var filter_to = '20150801';
 
-    stats_url += "?from=" + filter_from;
-    stats_url += "&to=" + filter_to;
+    var stats_url = `https://${self.domain}/api/v2/stats/daily?from=${filter_from}&to=${filter_to}`;
 
     fetch(stats_url, {
           headers: {
