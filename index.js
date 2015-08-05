@@ -3,9 +3,7 @@ require('./lib/insert-css');
 var d3      = require('d3');
 var fetch   = require('fetchify')(Promise).fetch;
 
-import PieChart from "./lib/chart-type/pie.js"
-import BarChart from "./lib/chart-type/bar.js"
-import SplineChart from "./lib/chart-type/spline.js"
+import GetChartType from "./lib/chart-type/chart-type.js"
 
 module.exports = Auth0DasboardWidget;
 
@@ -19,38 +17,13 @@ function Auth0DasboardWidget (app_token, domain, options) {
     this.charts = options.charts;
 }
 
-Auth0DasboardWidget.prototype.get_chart_type = function(type) {
-    var chart_type;
-
-    switch (type) {
-
-        case 'pie':
-            chart_type = PieChart;
-            break;
-
-        case 'bar':
-            chart_type = BarChart;
-            break;
-
-        case 'spline':
-            chart_type = SplineChart;
-            break;
-
-        default:
-            throw "Ivalid chart type '" + type + "'.";
-
-    }
-
-    return chart_type;
-}
-
 Auth0DasboardWidget.prototype.show = function(ele) {
     var self = this;
 
     var load_chart = function (chart, data) {
         var chart_wrapper = self.wrapper.append('div')
                                 .attr('id', chart.name);
-        var type = self.get_chart_type(chart.type);
+        var type = GetChartType(chart.type);
         type(chart_wrapper, data);
     };
 
@@ -63,9 +36,7 @@ Auth0DasboardWidget.prototype.show = function(ele) {
             .then(response => response.json())
             .then( data => data.map( d => [ d.age, d.count ] ) )
             .then( data => load_chart(chart, data) )
-            .catch(function(ex) {
-                console.log('parsing failed', ex)
-            });
+            .catch( ex => console.log('parsing failed', ex) );
     }
 
 }
@@ -78,35 +49,20 @@ Auth0DasboardWidget.prototype.showDaily = function(ele) {
 
     var stats_url = `https://${self.domain}/api/v2/stats/daily?from=${filter_from}&to=${filter_to}`;
 
-    fetch(stats_url, {
-          headers: {
-            'Authorization': 'Bearer ' + self.app_token
-          }
-        })
-        .then(function(response) {
-            return response.json()
-        })
-        .then(function(data) {
-            var new_data = [
-                ['Logins'],
-                ['Signups']
-            ];
-
-            data.forEach(function(d){
-                new_data[0].push(d.logins);
-                new_data[1].push(d.signups);
-            });
-
-            return new_data;
-        })
+    fetch(stats_url, { headers: { 'Authorization': `Bearer ${self.app_token}` } })
+        .then( response => response.json() )
+        .then( data => data.reduce(function(prev, curr){
+                            prev[0].push(curr.logins);
+                            prev[1].push(curr.signups);
+                            return prev;
+                        }, [ ['Logins'], ['Signups'] ])
+        )
         .then(function(data){
             var chart_wrapper = self.wrapper.append('div')
                                     .attr('id', 'daily');
-            var type = self.get_chart_type('spline');
+            var type = GetChartType('spline');
             type(chart_wrapper, data);
         })
-        .catch(function(ex) {
-            console.log('parsing failed', ex)
-        });
+        .catch( ex => console.log('parsing failed', ex) );
 
 }
