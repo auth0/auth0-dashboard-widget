@@ -74,13 +74,6 @@ module.exports = function (grunt) {
         dest: 'lib/css/main.css',
       },
     },
-    prefix: { //this adds 'a0-' to every class and id
-      css: {
-        src: 'lib/css/main.css',
-        dest: 'lib/css/main.css',
-        prefix: 'a0-'
-      }
-    },
     cssmin: {
       minify: {
         options: {
@@ -168,7 +161,7 @@ module.exports = function (grunt) {
     if (key !== 'grunt' && key.indexOf('grunt') === 0) { grunt.loadNpmTasks(key); }
   }
 
-  grunt.registerTask('css',           ['clean:css', 'less:dist', 'prefix:css', 'autoprefixer:main', 'cssmin:minify']);
+  grunt.registerTask('css',           ['clean:css', 'less:dist', 'autoprefixer:main', 'cssmin:minify']);
 
   grunt.registerTask('js',            ['clean:js', 'browserify:debug', 'exec:uglify']);
   grunt.registerTask('build',         ['css', 'js']);

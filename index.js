@@ -20,7 +20,7 @@ function Auth0DasboardWidget (app_token, domain, options) {
 
 Auth0DasboardWidget.prototype.load_chart = function (chart, data, wrapper) {
     var chart_wrapper = wrapper.append('div')
-                            .attr('id', chart.name);
+                            .attr('id', `a0-${chart.name}`);
     var type = GetChartType(chart.type);
     return new type(chart_wrapper, data);
 }
@@ -48,7 +48,7 @@ Auth0DasboardWidget.prototype.showDaily = function(ele) {
     var self = this;
 
     var wrapper = d3.select(ele).append('div')
-                               .attr('id', 'daily');
+                               .attr('id', 'a0-daily');
 
     var today = new Date();
     var a_month_ago = new Date();
