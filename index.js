@@ -2,6 +2,7 @@ require('./lib/insert-css');
 
 var d3      = require('d3');
 var fetch   = require('fetchify')(Promise).fetch;
+var dateFormat = require('dateformat');
 
 import GetChartType from "./lib/chart-type/chart-type.js"
 
@@ -17,17 +18,17 @@ function Auth0DasboardWidget (app_token, domain, options) {
     this.charts = options.charts;
 }
 
+Auth0DasboardWidget.prototype.load_chart = function (chart, data, wrapper) {
+    var chart_wrapper = wrapper.append('div')
+                            .attr('id', chart.name);
+    var type = GetChartType(chart.type);
+    var chart = new type(chart_wrapper, data);
+    return chart.generate();
+}
+
 Auth0DasboardWidget.prototype.show = function(ele) {
     var self = this;
-
-    var load_chart = function (chart, data) {
-        var chart_wrapper = self.wrapper.append('div')
-                                .attr('id', chart.name);
-        var type = GetChartType(chart.type);
-        type(chart_wrapper, data);
-    };
-
-    self.wrapper = d3.select(ele);
+    var wrapper = d3.select(ele);
 
     for (let a = 0; a < self.charts.length; a++) {
         let chart = self.charts[a];
@@ -35,7 +36,7 @@ Auth0DasboardWidget.prototype.show = function(ele) {
         fetch(chart.url)
             .then(response => response.json())
             .then( data => data.map( d => [ d.age, d.count ] ) )
-            .then( data => load_chart(chart, data) )
+            .then( data => self.load_chart(chart, data, wrapper) )
             .catch( ex => console.log('parsing failed', ex) );
     }
 
@@ -44,8 +45,15 @@ Auth0DasboardWidget.prototype.show = function(ele) {
 Auth0DasboardWidget.prototype.showDaily = function(ele) {
     var self = this;
 
-    var filter_from = '20150701';
-    var filter_to = '20150801';
+    var wrapper = d3.select(ele).append('div')
+                               .attr('id', 'daily');
+
+    var today = new Date();
+    var a_month_ago = new Date();
+    a_month_ago.setMonth( a_month_ago.getMonth() - 1 );
+
+    var filter_to = dateFormat( today, "yyyymmdd" );
+    var filter_from = dateFormat( a_month_ago, "yyyymmdd" );
 
     var stats_url = `https://${self.domain}/api/v2/stats/daily?from=${filter_from}&to=${filter_to}`;
 
@@ -57,12 +65,7 @@ Auth0DasboardWidget.prototype.showDaily = function(ele) {
                             return prev;
                         }, [ ['Logins'], ['Signups'] ])
         )
-        .then(function(data){
-            var chart_wrapper = self.wrapper.append('div')
-                                    .attr('id', 'daily');
-            var type = GetChartType('spline');
-            type(chart_wrapper, data);
-        })
+        .then( data => self.load_chart({ name: 'daily', type: 'spline'}, data, wrapper) )
         .catch( ex => console.log('parsing failed', ex) );
 
 }
