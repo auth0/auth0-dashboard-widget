@@ -8,20 +8,35 @@
 
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
-            var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJqY05ZOHd4YVoxWnVRYjhldlJJSGgzYkt3V0dWdEdqZyIsInNjb3BlcyI6eyJzdGF0cyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0Mzg3MDE0ODEsImp0aSI6IjQzMTlkZTIyZTRkNjg2ZjU1MTE4ZTJjODI1YjkyZWZjIn0.j6GgtAkdeVkoPHXtLVZhs4mOi5Rr8qmmBaoq2IwSNpM';
+            var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhQ2JUQUpOaTVIYnNqUEp0UnBTUDZCSW9MUE9yU2oyQ2dnIiwic2NvcGVzIjp7InN0YXRzIjp7ImFjdGlvbnMiOlsicmVhZCJdfX0sImlhdCI6MTQzOTkyMzEzNiwianRpIjoiMDlhYTE2Y2M1NTg2NTY0ODUxOTVjNjM3ZWZhYmVjOTgifQ.nkPYQHdYgnUNkLdmettLrct0rgI-cs9rfey8AzPDHgY';
 
-            var widget = new Auth0DasboardWidget(token,'wptest.auth0.com', {
+            var widget = new Auth0DasboardWidget(token,'login0.myauth0.com', {
 
                 charts:[
                     {
                         name:'age',
-                        url:'/data/ages.json',
-                        type:'pie'
+                        url:'https://login0.myauth0.com/api/v2/stats/users-age',
+                        type:'pie',
+                        key:'age'
                     },
                     {
                         name:'age_bars',
-                        url:'/data/ages.json',
-                        type:'bar'
+                        url:'https://login0.myauth0.com/api/v2/stats/users-age',
+                        type:'bar',
+                        key:'age'
+                    },
+
+                    {
+                        name:'providers',
+                        url:'https://login0.myauth0.com/api/v2/stats/providers',
+                        type:'pie',
+                        key:'provider'
+                    },
+                    {
+                        name:'providers_bars',
+                        url:'https://login0.myauth0.com/api/v2/stats/providers',
+                        type:'bar',
+                        key:'provider'
                     }
                 ]
 

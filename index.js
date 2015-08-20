@@ -32,9 +32,9 @@ Auth0DasboardWidget.prototype.show = function(ele) {
     for (let a = 0; a < self.charts.length; a++) {
         let chart = self.charts[a];
 
-        fetch(chart.url)
+        fetch(chart.url, { headers: { 'Authorization': `Bearer ${self.app_token}` } })
             .then(response => response.json())
-            .then( data => data.map( d => [ d.age, d.count ] ) )
+            .then( data => data.map( d => [ d[chart.key], d.count ] ) )
             .then(
                 data => self.load_chart(chart, data, wrapper)
                             .generate()
