@@ -10,40 +10,15 @@
         <script type="text/javascript">
             var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhQ2JUQUpOaTVIYnNqUEp0UnBTUDZCSW9MUE9yU2oyQ2dnIiwic2NvcGVzIjp7InN0YXRzIjp7ImFjdGlvbnMiOlsicmVhZCJdfX0sImlhdCI6MTQzOTkyMzEzNiwianRpIjoiMDlhYTE2Y2M1NTg2NTY0ODUxOTVjNjM3ZWZhYmVjOTgifQ.nkPYQHdYgnUNkLdmettLrct0rgI-cs9rfey8AzPDHgY';
 
-            var widget = new Auth0DasboardWidget(token,'login0.myauth0.com', {
-
+            var widget = new Auth0DasboardWidget('login0.myauth0.com', token, {
                 charts:[
-                    {
-                        name:'age',
-                        url:'https://login0.myauth0.com/api/v2/stats/users-age',
-                        type:'pie',
-                        key:'age'
-                    },
-                    {
-                        name:'age_bars',
-                        url:'https://login0.myauth0.com/api/v2/stats/users-age',
-                        type:'bar',
-                        key:'age'
-                    },
-
-                    {
-                        name:'providers',
-                        url:'https://login0.myauth0.com/api/v2/stats/providers',
-                        type:'pie',
-                        key:'provider'
-                    },
-                    {
-                        name:'providers_bars',
-                        url:'https://login0.myauth0.com/api/v2/stats/providers',
-                        type:'bar',
-                        key:'provider'
-                    }
+                    { type:'bar', data:'age' },
+                    { type:'pie', data:'providers' },
+                    { type:'spline', data:'daily' }
                 ]
-
-
             });
             widget.show('#dashboard-wrapper');
-            widget.showDaily('#daily-wrapper');
+
         </script>
     </body>
 </html>
