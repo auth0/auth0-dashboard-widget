@@ -15,19 +15,11 @@ export default function Auth0DasboardWidget (domain, app_token, options) {
     this.charts = options.charts;
 }
 
-Auth0DasboardWidget.prototype.load_chart = function (chart, data, wrapper) {
-    var chart_wrapper = wrapper.append('div')
-                            .attr('id', `a0-${chart.name}`);
-    var type = GetChartType(chart.type);
-    return new type(chart_wrapper, data);
-}
-
 Auth0DasboardWidget.prototype.show = function(ele) {
-    var self = this;
     var wrapper = d3.select(ele);
 
-    for (let a = 0; a < self.charts.length; a++) {
-      let chart_settings = self.charts[a];
+    for (let a = 0; a < this.charts.length; a++) {
+      let chart_settings = this.charts[a];
 
       renderer(this.domain, this.app_token, wrapper, chart_settings) ;
     }

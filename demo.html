@@ -8,13 +8,14 @@
 
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
-            var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhQ2JUQUpOaTVIYnNqUEp0UnBTUDZCSW9MUE9yU2oyQ2dnIiwic2NvcGVzIjp7InN0YXRzIjp7ImFjdGlvbnMiOlsicmVhZCJdfX0sImlhdCI6MTQzOTkyMzEzNiwianRpIjoiMDlhYTE2Y2M1NTg2NTY0ODUxOTVjNjM3ZWZhYmVjOTgifQ.nkPYQHdYgnUNkLdmettLrct0rgI-cs9rfey8AzPDHgY';
+            var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJkczlEa1RVTFg5NEF3dFJNc1BJQ2JFSTJMVGM2Rk4zTSIsInNjb3BlcyI6eyJzdGF0cyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NDA1Mjk5NTAsImp0aSI6IjZkZWUxZGVmNGEyYzhlYzNmNDE3YmY0YzRlMmI0YjY4In0.EsMnbgYqa9rSF-Ew8ii-eAcr-6b5j3bSYt73aeEllh4';
 
-            var widget = new Auth0DasboardWidget('login0.myauth0.com', token, {
+            var widget = new Auth0DasboardWidget('auth0vagrant3.myauth0.com', token, {
                 charts:[
                     { type:'bar', data:'age' },
                     { type:'pie', data:'providers' },
-                    { type:'spline', data:'daily' }
+                    { type:'spline', data:'daily' },
+                    { type:'bar', data:'income' }
                 ]
             });
             widget.show('#dashboard-wrapper');
