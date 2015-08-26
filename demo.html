@@ -12,10 +12,10 @@
 
             var widget = new Auth0DasboardWidget('auth0vagrant3.myauth0.com', token, {
                 charts:[
-                    { type:'bar', data:'age' },
-                    { type:'pie', data:'providers' },
-                    { type:'spline', data:'daily' },
-                    { type:'bar', data:'income' }
+                    { type:'bar', data:'age' }
+                    ,{ type:'pie', data:'providers' }
+                    ,{ type:'spline', data:'daily' }
+                    ,{ type:'bar', data:'income' }
                 ]
             });
             widget.show('#dashboard-wrapper');

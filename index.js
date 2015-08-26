@@ -16,11 +16,13 @@ export default function Auth0DasboardWidget (domain, app_token, options) {
 }
 
 Auth0DasboardWidget.prototype.show = function(ele) {
-    var wrapper = d3.select(ele);
+    var dashboard_wrapper = d3.select(ele);
 
     for (let a = 0; a < this.charts.length; a++) {
-      let chart_settings = this.charts[a];
-
-      renderer(this.domain, this.app_token, wrapper, chart_settings) ;
+      let chart_data = this.charts[a];
+      chart_data.domain = this.domain;
+      chart_data.app_token = this.app_token;
+      chart_data.dashboard_wrapper = dashboard_wrapper;
+      renderer(chart_data) ;
     }
 }
