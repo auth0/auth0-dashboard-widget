@@ -8,7 +8,10 @@
         <script type="text/javascript">
 
         window.addEventListener('a0-dashboard-init', function (e) { 
-            var age = new Auth0AgeWidget({
+
+            var age = new Auth0BasicChartWidget({
+                name:'age',
+                grouping_field:'agebucket',
                 selection_enabled: true,
                 color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
                 type: 'pie',
@@ -27,14 +30,17 @@
         <script type="text/javascript">
 
         window.addEventListener('a0-dashboard-init', function (e) { 
-            var age = new Auth0GenderWidget({
+            
+            var gender = new Auth0BasicChartWidget({
+                name:'gender',
+                grouping_field:'gender',
                 selection_enabled: true,
                 color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
                 type: 'pie',
                 data_processor: Auth0PieDataProcessor,
                 wrapper_selector:'#auth0ChartGender'
             });
-            e.detail.widget.register(age);
+            e.detail.widget.register(gender);
 
         }, false);
 
@@ -43,7 +49,6 @@
 
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
-            var age = new Auth0AgeWidget({});
 
             var widget = new Auth0DasboardWidget('http://localhost:3000', {
                 charts:[
