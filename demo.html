@@ -3,14 +3,30 @@
     </head>
     <body>
 
-        <div id="dashboard-wrapper"></div>
-        <div id="daily-wrapper"></div>
+        <div id="auth0ChartAge"></div>
+
+        <script type="text/javascript">
+
+        window.addEventListener('a0-dashboard-init', function (e) { 
+            var age = new Auth0AgeWidget({
+                selection_enabled: true,
+                color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                type: 'pie',
+                data_processor: Auth0PieDataProcessor,
+                wrapper_selector:'#auth0ChartAge'
+            });
+            e.detail.widget.register(age);
+
+        }, false);
+
+
+        </script>
 
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
-            var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJkczlEa1RVTFg5NEF3dFJNc1BJQ2JFSTJMVGM2Rk4zTSIsInNjb3BlcyI6eyJzdGF0cyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NDA1Mjk5NTAsImp0aSI6IjZkZWUxZGVmNGEyYzhlYzNmNDE3YmY0YzRlMmI0YjY4In0.EsMnbgYqa9rSF-Ew8ii-eAcr-6b5j3bSYt73aeEllh4';
+            var age = new Auth0AgeWidget({});
 
-            var widget = new Auth0DasboardWidget('auth0vagrant3.myauth0.com', token, {
+            var widget = new Auth0DasboardWidget('http://localhost:3000', {
                 charts:[
                     { type:'bar', data:'age' }
                     ,{ type:'pie', data:'providers' }
@@ -18,7 +34,7 @@
                     ,{ type:'bar', data:'income' }
                 ]
             });
-            widget.show('#dashboard-wrapper');
+            widget.init();
 
         </script>
     </body>

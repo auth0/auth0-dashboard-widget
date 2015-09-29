@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var pkg = require('./package');
-var cssPrefix = require('css-prefix');
 
 var minor_version = pkg.version.replace(/\.(\d)*$/, '');
 var major_version = pkg.version.replace(/\.(\d)*\.(\d)*$/, '');
@@ -56,7 +55,7 @@ module.exports = function (grunt) {
           paths: ['lib/css'],
         },
         files: {
-          'lib/css/main.css': 'lib/css/main.less'
+          'lib/css/main.css': 'lib/less/main.less'
         }
       },
       demo: {
@@ -64,15 +63,6 @@ module.exports = function (grunt) {
           'support/development-demo/build/index.css': 'support/development-demo/index.less'
         }
       }
-    },
-    autoprefixer: {
-      options: {
-        browsers: ['> 1%', 'last 2 versions', 'ff 15', 'opera 12.1', 'ie 8']
-      },
-      main: {
-        src:  'lib/css/main.css',
-        dest: 'lib/css/main.css',
-      },
     },
     cssmin: {
       minify: {
@@ -143,25 +133,13 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerMultiTask('prefix', 'Prefix css.', function() {
-    var done = this.async();
-    var that = this;
-    fs.readFile(__dirname + '/' + this.data.src, {encoding: 'utf8'}, function (err, data) {
-      if (err) { return done(err);  }
-      var prefixed = cssPrefix(that.data.prefix, data.toString());
-      fs.writeFile(__dirname + '/' + that.data.dest, prefixed, function (err) {
-        if (err) { return done(err); }
-        done();
-      });
-    });
-  });
 
   // Loading dependencies
   for (var key in grunt.file.readJSON('package.json').devDependencies) {
     if (key !== 'grunt' && key.indexOf('grunt') === 0) { grunt.loadNpmTasks(key); }
   }
 
-  grunt.registerTask('css',           ['clean:css', 'less:dist', 'autoprefixer:main', 'cssmin:minify']);
+  grunt.registerTask('css',           ['clean:css', 'less:dist', 'cssmin:minify']);
 
   grunt.registerTask('js',            ['clean:js', 'browserify:debug', 'exec:uglify']);
   grunt.registerTask('build',         ['css', 'js']);
