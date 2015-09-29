@@ -27,6 +27,10 @@ export default class Auth0DasboardWidget {
     init() {
        return fetch(`${this.domain}/stats`)
         .then( response => response.json() )
+        .then( function(response) {
+          console.table(response);
+          return response;
+        } )
         .then( response => this.charts.forEach( chart => chart.init(response) ) )
     }
 

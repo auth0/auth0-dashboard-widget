@@ -22,6 +22,25 @@
 
         </script>
 
+        <div id="auth0ChartGender"></div>
+
+        <script type="text/javascript">
+
+        window.addEventListener('a0-dashboard-init', function (e) { 
+            var age = new Auth0GenderWidget({
+                selection_enabled: true,
+                color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                type: 'pie',
+                data_processor: Auth0PieDataProcessor,
+                wrapper_selector:'#auth0ChartGender'
+            });
+            e.detail.widget.register(age);
+
+        }, false);
+
+
+        </script>
+
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
             var age = new Auth0AgeWidget({});
