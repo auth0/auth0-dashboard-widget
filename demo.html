@@ -2,7 +2,7 @@
     <head>
     </head>
     <body>
-
+        <div id="auth0message"></div>
         <div id="auth0ChartAge"></div>
 
         <script type="text/javascript">
@@ -30,6 +30,7 @@
         <script type="text/javascript">
 
         window.addEventListener('a0-dashboard-init', function (e) { 
+        // setTimeout(function () { 
             
             var gender = new Auth0BasicChartWidget({
                 name:'gender',
@@ -42,6 +43,27 @@
             });
             e.detail.widget.register(gender);
 
+        // }, 10 * 1000);
+        }, false);
+
+
+        </script>
+
+        <div id="auth0ChartLocations" style="width:400px;height:400px;"></div>
+
+        <script type="text/javascript">
+
+        window.addEventListener('a0-dashboard-init', function (e) { 
+        // setTimeout(function () { 
+            
+            var gender = new Auth0MapWidget({
+                name:'location',
+                wrapper_selector:'auth0ChartLocations',
+                map_styles:[{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#e0efef"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"hue":"#1900ff"},{"color":"#c0e8e8"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":700}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7dcdcd"}]}] 
+            });
+            e.detail.widget.register(gender);
+
+        // }, 10 * 1000);
         }, false);
 
 
@@ -50,15 +72,16 @@
         <script src="/build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">
 
-            var widget = new Auth0DasboardWidget('http://localhost:3000', {
-                charts:[
-                    { type:'bar', data:'age' }
-                    ,{ type:'pie', data:'providers' }
-                    ,{ type:'spline', data:'daily' }
-                    ,{ type:'bar', data:'income' }
-                ]
+            var widget = new Auth0DasboardWidget('https://webtask.it.auth0.com/api/run/wt-5491169046745-0/dashboard_endpoint?webtask_no_cache=1');
+
+            widget.on('loading', function(){
+                document.getElementById('auth0message').innerHTML = "Loading...";
             });
-            widget.load();
+            widget.on('loaded', function(){
+                document.getElementById('auth0message').innerHTML = "";
+            })
+
+            widget.init();
 
         </script>
     </body>
