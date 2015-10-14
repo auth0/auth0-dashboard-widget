@@ -1,0 +1,208 @@
+<html>
+    <head>
+
+        <style>
+
+        @font-face {
+            font-family: 'Avenir Roman';
+            src: url('https://cdn.auth0.com/fonts/avenir/avenir-roman.eot');
+            src: url('https://cdn.auth0.com/fonts/avenir/avenir-roman.eot?#iefix') format('embedded-opentype'),
+                url('https://cdn.auth0.com/fonts/avenir/avenir-roman.woff') format('woff'),
+                url('https://cdn.auth0.com/fonts/avenir/avenir-roman.ttf')  format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+          
+
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #030201;
+            font-family: 'Avenir Roman';
+            font-weight: normal;
+        }
+
+        #auth0ChartLocations {
+            position:absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            width: 70%;
+        }
+
+        #auth0ChartLocations:before {
+            content: " ";
+            width: 25%;
+            height: 100%;
+            position: absolute;
+            z-index: 9999;
+            top: 0;
+            right: 0;
+            
+            background: -moz-linear-gradient(left, rgba(3,2,1,0) 0%, rgba(3,2,1,1) 100%);
+            background: -webkit-gradient(left top, right top, color-stop(0%, rgba(3,2,1,0)), color-stop(100%, rgba(3,2,1,1)));
+            background: -webkit-linear-gradient(left, rgba(3,2,1,0) 0%, rgba(3,2,1,1) 100%);
+            background: -o-linear-gradient(left, rgba(3,2,1,0) 0%, rgba(3,2,1,1) 100%);
+            background: -ms-linear-gradient(left, rgba(3,2,1,0) 0%, rgba(3,2,1,1) 100%);
+            background: linear-gradient(to right, rgba(3,2,1,0) 0%, rgba(3,2,1,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#030201', endColorstr='#030201', GradientType=1 );
+        }
+
+        #charts {
+            position:absolute;
+            top:0;
+            bottom: 0;
+            width: 30%;
+            right: 0;
+        }
+
+        svg .c3-legend-item text {
+            fill:#FFFFFF;
+        }
+        svg .c3-chart-arc path {
+            stroke: #FFF;
+        }
+
+        #auth0message {
+            display: none;
+            z-index: 999999;
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background:rgba(0,0,0,0.9);
+            color:#FFFFFF;
+            text-align: center;
+            font-size: 50px;
+            width: 100%;
+            height: 100%;
+        }
+        #auth0message.visible{
+            display: table;
+        }
+
+
+        #auth0message span {
+          display: table-cell;
+          vertical-align: middle;
+        }
+
+        </style>
+
+    </head>
+    <body>
+        <div id="auth0message"><span>Loading...</span></div>
+
+        <div id="auth0ChartLocations"></div>
+
+        <script type="text/javascript">
+
+        window.addEventListener('a0-dashboard-init', function (e) { 
+        // setTimeout(function () { 
+            
+            var gender = new Auth0MapWidget({
+                name:'location',
+                wrapper_selector:'auth0ChartLocations',
+                map_styles:[{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":17}]}]
+            });
+            e.detail.widget.register(gender);
+
+        // }, 10 * 1000);
+        }, false);
+
+
+        </script>
+
+        <div id="charts">
+
+            <div id="auth0ChartAge"></div>
+
+            <script type="text/javascript">
+
+            window.addEventListener('a0-dashboard-init', function (e) { 
+
+                var age = new Auth0BasicChartWidget({
+                    name:'age',
+                    grouping_field:'agebucket',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartAge'
+                });
+                e.detail.widget.register(age);
+
+            }, false);
+
+
+            </script>
+
+            <div id="auth0ChartGender"></div>
+
+            <script type="text/javascript">
+
+            window.addEventListener('a0-dashboard-init', function (e) { 
+            // setTimeout(function () { 
+                
+                var gender = new Auth0BasicChartWidget({
+                    name:'gender',
+                    grouping_field:'gender',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartGender'
+                });
+                e.detail.widget.register(gender);
+
+            // }, 10 * 1000);
+            }, false);
+
+
+            </script>
+
+            <div id="auth0ChartIdP"></div>
+
+            <script type="text/javascript">
+
+            window.addEventListener('a0-dashboard-init', function (e) { 
+            // setTimeout(function () { 
+                
+                var gender = new Auth0MultivalueChartWidget({
+                    name:'idp',
+                    grouping_field:'idp',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartIdP'
+                });
+                e.detail.widget.register(gender);
+
+            // }, 10 * 1000);
+            }, false);
+
+
+            </script>
+        </div>
+
+
+        <script src="/build/auth0-dashboard-widget.js"></script>
+        <script type="text/javascript">
+
+            var widget = new Auth0DasboardWidget('https://webtask.it.auth0.com/api/run/wt-5491169046745-0/dashboard_endpoint?webtask_no_cache=1');
+
+            widget.on('loading', function(){
+                document.getElementById('auth0message').className = "visible"
+            });
+            widget.on('loaded', function(){
+                document.getElementById('auth0message').className = "hidden"
+            })
+
+            widget.init();
+
+        </script>
+    </body>
+</html>
