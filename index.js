@@ -79,5 +79,9 @@ export default class Auth0DasboardWidget {
     this.load(_.values(this.filters), Object.keys(this.filters));
   }
 
+  refresh() {
+    this.load(_.values(this.filters), Object.keys(this.filters));
+  }
+
 }
 

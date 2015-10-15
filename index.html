@@ -1,224 +1,146 @@
 <html>
     <head>
 
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-        <style type="text/css">
-
-            #auth0ChartLocations {
-                position: fixed !important;
-                top:100px;
-                left:0;
-                bottom:0;
-                background: #ececec !important;
-            }
-            .well {
-                background-color: #fff;
-                padding: 0;
-                margin-bottom: 0;
-                box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
-                border-radius: 2px;
-                border: 0;
-            }
-            #charts {
-                position: absolute;
-                top:0;
-                right:0;
-                min-height: 100%;
-            }
-
-            #loading {
-                display: none;
-                padding: 200px;
-                background-color: rgba(255,255,255,0.7);
-                position: absolute;
-                top:0;
-                left:0;
-                right:0;
-                bottom:0;
-                text-align: center;
-            }
-            #loading.visible {
-                display: block;
-            }
-
-
-            #loading .spinner {
-                width: 50px;
-                animation: rotator 1.4s linear infinite;
-            }
-
-            @keyframes rotator {
-              0% {
-                transform: rotate(0deg);
-              }
-              100% {
-                transform: rotate(270deg);
-              }
-            }
-
-            #loading .path {
-              stroke-dasharray: 187;
-              stroke-dashoffset: 0;
-              transform-origin: center;
-              animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-            }
-
-            @keyframes colors {
-              0% {
-                stroke: #4285F4;
-              }
-              25% {
-                stroke: #DE3E35;
-              }
-              50% {
-                stroke: #F7C223;
-              }
-              75% {
-                stroke: #1B9A59;
-              }
-              100% {
-                stroke: #4285F4;
-              }
-            }
-
-            @keyframes dash {
-              0% {
-                stroke-dashoffset: 187;
-              }
-              50% {
-                stroke-dashoffset: 46.75;
-                transform: rotate(135deg);
-              }
-              100% {
-                stroke-dashoffset: 187;
-                transform: rotate(450deg);
-              }
-            }
-            .main-content {
-                position: relative;
-            }
-            .header-panel {
-                background-color: #001d17;
-                height: 100px;
-                position: relative;
-                color:#fff;
-                z-index: 3;
-            }
-            .shadow-z-2 {
-                box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
-            }
-
-        </style>
-
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css" rel="stylesheet">
+        <link href="demoassets/main.css" rel="stylesheet">
     </head>
     <body>
-        <div class="header-panel shadow-z-2">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-xs-5">
-                <h1>Dashboard Demo</h1>
-              </div>
+
+        <div class="navbar navbar-default">
+            <div class="navbar-header">
+                <h1>Auth0 Dashboard</h1>
             </div>
-          </div>
         </div>
 
-        <div class="container-fluid">
-            <div class="row main-content">
-                <div id="auth0ChartLocations" class="col-xs-7"></div>
 
-                <script type="text/javascript">
+    <div class="container-fluid">
 
-                window.addEventListener('a0-dashboard-init', function (e) { 
-                // setTimeout(function () { 
-                    
-                    var gender = new Auth0MapWidget({
-                        name:'location',
-                        wrapper_selector:'auth0ChartLocations',
-                        map_styles:[{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]}]
-                    });
-                    e.detail.widget.register(gender);
-
-                // }, 10 * 1000);
-                }, false);
-
-
-                </script>
-
-                <div id="charts" class="col-xs-5 pull-right well page active">
-
-                    <div id="auth0ChartAge"></div>
-
-                    <script type="text/javascript">
-
-                    window.addEventListener('a0-dashboard-init', function (e) { 
-
-                        var age = new Auth0BasicChartWidget({
-                            name:'age',
-                            grouping_field:'agebucket',
-                            selection_enabled: true,
-                            color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
-                            type: 'pie',
-                            data_processor: Auth0PieDataProcessor,
-                            wrapper_selector:'#auth0ChartAge'
-                        });
-                        e.detail.widget.register(age);
-
-                    }, false);
-
-
-                    </script>
-
-                    <div id="auth0ChartGender"></div>
-
-                    <script type="text/javascript">
-
-                    window.addEventListener('a0-dashboard-init', function (e) { 
-                    // setTimeout(function () { 
-                        
-                        var gender = new Auth0BasicChartWidget({
-                            name:'gender',
-                            grouping_field:'gender',
-                            selection_enabled: true,
-                            color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
-                            type: 'pie',
-                            data_processor: Auth0PieDataProcessor,
-                            wrapper_selector:'#auth0ChartGender'
-                        });
-                        e.detail.widget.register(gender);
-
-                    // }, 10 * 1000);
-                    }, false);
-
-
-                    </script>
-
-                    <div id="auth0ChartIdP"></div>
-
-                    <script type="text/javascript">
-
-                    window.addEventListener('a0-dashboard-init', function (e) { 
-                    // setTimeout(function () { 
-                        
-                        var gender = new Auth0MultivalueChartWidget({
-                            name:'idp',
-                            grouping_field:'idp',
-                            selection_enabled: true,
-                            color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
-                            type: 'pie',
-                            data_processor: Auth0PieDataProcessor,
-                            wrapper_selector:'#auth0ChartIdP'
-                        });
-                        e.detail.widget.register(gender);
-
-                    // }, 10 * 1000);
-                    }, false);
-
-
-                    </script>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div id="auth0ChartLocations"></div>
                 </div>
-
             </div>
-        </div>
+        </div>  
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="header">User's Income</h2> 
+                        <div id="auth0ChartIncome"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">   
+                        <h2 class="header">User's Age</h2>   
+                        <div id="auth0ChartAge"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="header">User's Gender</h2> 
+                        <div id="auth0ChartGender"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="header">User's IdPs</h2> 
+                        <div id="auth0ChartIdP"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="header">User's Sign ups</h2> 
+                        <div id="auth0ChartSignups"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>      
+    </div>    
+
+    <a id="refresh" href="javascript:widget.refresh();" class="btn btn-info btn-fab btn-raised mdi-navigation-refresh"></a>  
+
+
+        <script type="text/javascript">
+
+            window.addEventListener('a0-dashboard-init', function (e) { 
+                
+                var gender = new Auth0MapWidget({
+                    name:'location',
+                    wrapper_selector:'auth0ChartLocations',
+                    map_styles:[{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]}]
+                });
+                e.detail.widget.register(gender);
+
+                var age = new Auth0BasicChartWidget({
+                    name:'age',
+                    grouping_field:'agebucket',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartAge'
+                });
+                e.detail.widget.register(age);
+
+                var income = new Auth0IncomeWidget({
+                    wrapper_selector:'#auth0ChartIncome'
+                });
+                e.detail.widget.register(income);
+
+                var signups = new Auth0TimeLineChartWidget({
+                    name:'created_at',
+                    grouping_field:'created_at',
+                    type: 'spline',
+                    data_processor: Auth0BarsDataProcessor,
+                    wrapper_selector:'#auth0ChartSignups'
+                });
+                e.detail.widget.register(signups);
+                
+                var gender = new Auth0BasicChartWidget({
+                    name:'gender',
+                    grouping_field:'gender',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartGender'
+                });
+                e.detail.widget.register(gender);
+                
+                var idp = new Auth0MultivalueChartWidget({
+                    name:'idp',
+                    grouping_field:'idp',
+                    selection_enabled: true,
+                    color_pattern:['#F39C12','#2ECC71','#3498DB','#9B59B6','#34495E','#F1C40F','#E67E22','#E74C3C', '#1ABC9C'],
+                    type: 'pie',
+                    data_processor: Auth0PieDataProcessor,
+                    wrapper_selector:'#auth0ChartIdP'
+                });
+                e.detail.widget.register(idp);
+
+            }, false);
+
+        </script>
+
+
+
 
         <div id="loading">
             
@@ -226,6 +148,11 @@
 
         </div>
 
+
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
 
         <script src="build/auth0-dashboard-widget.js"></script>
         <script type="text/javascript">

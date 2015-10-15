@@ -1,0 +1,87 @@
+.navbar h1 {
+  margin: 10px;
+  font-size: 30px;
+}
+
+#auth0ChartLocations {
+  height: 400px;
+}
+
+#auth0ChartIncome {
+  height: 753px;
+}
+
+#refresh {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+#loading {
+    display: none;
+    padding: 200px;
+    background-color: rgba(255,255,255,0.7);
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    text-align: center;
+}
+#loading.visible {
+    display: block;
+}
+
+
+#loading .spinner {
+    width: 50px;
+    animation: rotator 1.4s linear infinite;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+#loading .path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {
+    stroke: #4285F4;
+  }
+  25% {
+    stroke: #DE3E35;
+  }
+  50% {
+    stroke: #F7C223;
+  }
+  75% {
+    stroke: #1B9A59;
+  }
+  100% {
+    stroke: #4285F4;
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+  }
+}

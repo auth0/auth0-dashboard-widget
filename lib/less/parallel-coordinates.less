@@ -1,0 +1,233 @@
+.parallel-coordinates {
+  background:transparent;
+}
+
+.parallel-coordinates svg {
+  
+  div#tooltip {
+    position: absolute;
+    font-size:11px;
+
+    top:0;
+    bottom:0;
+    z-index:9;
+    font-size: 11px;
+    color:#333;
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+
+    div {
+      width: 180px;
+      background: rgba(0,0,0,0.8);
+      padding:5px;
+      color:#fff;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+    h4 {
+      margin: 2px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+  }
+
+  #columns line {
+    shape-rendering: crispEdges;
+    stroke:#666;
+    stroke-width:1;
+    fill:none;
+  }
+
+  #languages {
+    circle {
+      stroke:none;
+      fill:#333;
+    }
+
+    path {
+      stroke:rgb(31, 119, 180);
+      stroke-opacity:0.2;
+      stroke-width:1;
+      fill:none;
+    }
+
+    text {
+      fill:#000;
+      font-size: 12px;
+      text-anchor: end;
+    }
+
+    g .lang-label {
+      cursor: pointer;
+    }
+
+    g.hover .lang-label text,
+    g.highlight .lang-label text,
+    g.year .lang-label text {
+      fill-opacity:1;
+      fill:#fff;
+    }
+
+    .lang-label rect {
+      fill:rgb(31, 119, 180);
+      fill-opacity:0;
+    }
+    g.hover .lang-label rect,
+    g.year .lang-label rect {
+      fill-opacity:1;
+    }
+    g.highlight .lang-label rect {
+      fill-opacity:1;
+      fill:#333;
+    }
+    g.hover .lang-label rect.hover {
+      fill-opacity:0;
+    }
+  }
+
+  #labels .label {
+    text {
+      fill-opacity:0;
+      text-anchor:middle;
+      font-weight: normal;
+      fill:#333;
+    }
+
+    rect.ix {
+      fill:#000;
+      fill-opacity:0;
+      cursor: pointer;
+    }
+
+    path.label {
+      fill:#fff;
+      stroke:rgb(31, 119, 180);
+      fill-opacity:0.8;
+      stroke-opacity:0.8;
+      display: none;
+    }
+  }
+
+  #labels g.hover .label {
+    path.label,
+    text {
+      font-size:12px;
+      display: block;
+      fill-opacity:1;
+    }
+    path.label {
+      fill-opacity:0.8;
+    }
+    path.label,
+    text {
+      display: none;
+      fill-opacity:0;
+    }
+  }
+  #labels g.hover.year {
+    .label:last-child text,
+    .label.year text {
+      display: block;
+      fill-opacity:1;
+    }
+  }
+
+  #languages {
+    g.highlight g.connection path,
+    g.highlight g.connection.year path,
+    g.hover g.connection path,
+    g.year g.connection path {
+      stroke:rgb(31, 119, 180);
+      stroke-opacity:0.8;
+      stroke-width:3;
+    }
+    g.highlight g.connection path,
+    g.highlight g.connection.year path,
+      #labels g.highlight g.label path.label {
+      stroke:#333;
+    }
+    .connection path.hover {
+      stroke-opacity:0;
+      stroke-width:10;
+    }
+
+    .marker circle {
+      fill:#333;
+      fill-opacity:1;
+    }
+    .marker circle.hover {
+      fill:rgb(31, 119, 180);
+      fill-opacity:0.2;
+    }
+    .marker.ordinal circle {
+      fill-opacity:0;
+    }
+    .marker text {
+      text-anchor:middle;
+      font-size:10px;
+      fill:#333;
+    }
+    .marker line {
+      stroke-width:4;
+      stroke:#333;
+      stroke-opacity:0;
+    }
+    .marker rect {
+      shape-rendering: crispEdges;
+      stroke-width:1;
+      stroke:rgb(31, 119, 180);
+      stroke-opacity:0;
+      fill-opacity:0;
+    }
+    .marker.ordinal line {
+      stroke-opacity:1;
+    }
+    .marker.ordinal rect {
+      stroke-opacity:0.5;
+      fill-opacity:1;
+    }
+    g.hover .marker rect,
+    g.year .marker rect {
+      stroke-width:1;
+      stroke-opacity:1;
+    }
+    g.highlight .marker rect {
+      stroke:#333;
+      stroke-opacity:1;
+    }
+  }
+  .column text.title {
+    text-anchor:middle;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 400;
+    cursor: help;
+
+    &.first {
+      text-anchor:end;
+    }
+  }
+  
+  #columns g.axis {
+    line {
+      shape-rendering: crispEdges;
+      stroke:#777;
+      stroke-width:1;
+    }
+    g.tick text {
+      font-size: 10px;
+      fill:#777;
+      text-anchor:middle;
+    }
+    g.tick.start text {
+      text-anchor:start;
+    }
+    g.tick.end text {
+      text-anchor:end;
+    }
+  }
+
+}
