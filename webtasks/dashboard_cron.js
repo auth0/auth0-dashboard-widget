@@ -1,4 +1,8 @@
-//wt cron schedule -n mycron "*/30 * * * *" dashboard_cron.js  -p "wptest-default"
+//wt cron schedule -n mycron "*/30 * * * *" dashboard_cron.js -p "wptest-default" \
+//  --secret mongo_connection_string=mongodb://webtasks:123456@ds051873.mongolab.com:51873/dashboard \
+//  --secret domain=wptest.auth0.com \
+//  --secret app_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJqY05ZOHd4YVoxWnVRYjhldlJJSGgzYkt3V0dWdEdqZyIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NDMxOTc5NzQsImp0aSI6IjMyNjdkYWM5MTA0NDBlNDFmZTg0NmM0ODk2OTBmYzg1In0.Y44xa8VFfWZK68Nr8fBR_lWJ8CAuT00uST5JPJpPU0o \
+//  --output url --profile {WEBTASK PROFILE} mfa-passwordless.js
 
 var MongoClient = require('mongodb').MongoClient
 var assert = require('assert');
@@ -7,27 +11,32 @@ var request = Promise.promisify(require("request"));
 var _ = require('lodash');
 var moment = require('moment');
 
-var page_size = 100;
-var domain = 'wptest.auth0.com';
-var app_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJqY05ZOHd4YVoxWnVRYjhldlJJSGgzYkt3V0dWdEdqZyIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NDMxOTc5NzQsImp0aSI6IjMyNjdkYWM5MTA0NDBlNDFmZTg0NmM0ODk2OTBmYzg1In0.Y44xa8VFfWZK68Nr8fBR_lWJ8CAuT00uST5JPJpPU0o';
-var search_engine = 'v2';
+module.exports = function (cb, context) {
 
-var url = 'mongodb://webtasks:123456@ds051873.mongolab.com:51873/dashboard';
+  var conf = {
+    mongo_connection_string : context.data.client_secret,
+    domain : context.data.domain,
+    app_token : context.data.app_token,
+    page_size : context.data.page_size || 100,
+    search_engine : context.data.search_engine || 'v2'
+  };
 
-module.exports = function (cb) {
-  MongoClient.connect(url, function(err, db) {
+  MongoClient.connect(conf.mongo_connection_string, function(err, db) {
     assert.equal(null, err);
-    updateUsersData(cb, db);
+
+    conf.db = db;
+
+    updateUsersData(cb, conf);
   });
 }
 
-function updateUsersData(cb, db) {
-  db.collection('settings').findOne( { setting: 'last_sync' }, function(err, doc) {
-    load_data(cb, db, 0, '', true, (doc && doc.value) || null);
+function updateUsersData(cb, conf) {
+  conf.db.collection('settings').findOne( { setting: 'last_sync' }, function(err, doc) {
+    load_data(cb, conf.db, 0, '', true, (doc && doc.value) || null);
   });
 }
 
-function load_data(cb, db, page, filter, first, last_sync) {
+function load_data(cb, conf, page, filter, first, last_sync) {
 
   if (typeof(page) === 'undefined') page = 0;
   if (typeof(first) === 'undefined') first = false;
@@ -41,26 +50,26 @@ function load_data(cb, db, page, filter, first, last_sync) {
   console.log("DATA INITIALIZE: Loading page " + page);
   console.log("\t Filter: ", filter);
 
-  get_users(filter, page, page_size).then(function(content) {
+  get_users(conf, filter, page, conf.page_size).then(function(content) {
 
     if (content && content.length > 0) {
       
       console.log("\t PROCESING: "+content.length+" users");
       content.forEach(function(user) {
-        db.collection('users').update({ user_id: user.user_id }, mapper( user ), {upsert:true});
+        conf.db.collection('users').update({ user_id: user.user_id }, mapper( user ), {upsert:true});
       })
       console.log("\t DONE");
 
-      if (content.length === page_size) {
-        load_data(db, page+1, filter, first);
+      if (content.length === conf.page_size) {
+        load_data(conf, page+1, filter, first);
       } else {
-        update_last_sync(db, cb);
+        update_last_sync(conf, cb);
       }
 
     }
     else {
       console.log("\t NO UPDATES");
-      db.close();
+      conf.db.close();
       cb(null, 'DONE');
     }
 
@@ -70,23 +79,23 @@ function load_data(cb, db, page, filter, first, last_sync) {
 
 }
 
-function update_last_sync(db,cb) {
-  db.collection('settings').update({ setting: 'last_sync' }, { setting: 'last_sync', value: (new Date()) }, {upsert:true}, function() {
-    db.close();
+function update_last_sync(conf,cb) {
+  conf.db.collection('settings').update({ setting: 'last_sync' }, { setting: 'last_sync', value: (new Date()) }, {upsert:true}, function() {
+    conf.db.close();
     console.log('closed');
     cb(null, 'DONE');
   });
 }
 
-function get_users(q, page, per_page) {
+function get_users(conf, q, page, per_page) {
 
   return request({
-    url:"https://"+domain+"/api/v2/users",
+    url:"https://"+conf.domain+"/api/v2/users",
     headers: {
-      "Authorization": "Bearer " + app_token
+      "Authorization": "Bearer " + conf.app_token
     },
     qs: {
-      search_engine:search_engine,
+      search_engine:conf.search_engine,
       q:q,
       page:page,
       per_page:per_page

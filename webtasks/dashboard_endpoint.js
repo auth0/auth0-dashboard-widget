@@ -56,7 +56,7 @@ app.all('/',
   },
   function (req, res) {
     if (global.db) {
-      answerRequest(global.db, req, res);
+      next();
     } else {
 
       MongoClient.connect(url, function(err, db) {
@@ -64,22 +64,22 @@ app.all('/',
         if (err) {
           res.json(err).end();
         } else {
-          answerRequest(db, req, res);
+          next();
         }
       });
 
     }
+  },
+  function (req, res) {
+
+    global.db.collection('users').find(req.filter).toArray(function(err, docs) {
+
+        res.json(docs).end();
+    
+    });
+
   });
 
 
-function answerRequest(db, req, res) {
-
-  db.collection('users').find(req.filter).toArray(function(err, docs) {
-
-      res.json(docs).end();
-  
-  });
-
-}
 
 module.exports = Webtask.fromExpress(app);
